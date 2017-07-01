@@ -4,11 +4,11 @@ from random import randint
 
 class Grasp:
     def __init__(self, seed):
-        self.seed = seed
+		self.seed = seed
 		self.NUM_NEIGHBOURS = 10
 		self.NUM_SELECTED_ITEMS = 10
 		self.MAX_ITERATIONS = 10
-        self.instance = KnapsackSharing()
+		self.instance = KnapsackSharing()
 		self.solution = []
 		self.solutionWeight = 0
 		
@@ -66,22 +66,21 @@ class Grasp:
 		while self.solutionWeight < self.instance.capacity :
 			self.insertBestItem()
 			
-			
+	####
+	# Hill Climbing busca local
+	####
 	def hillClimbing(self, partialSolution):
 		# Adaptar o hill climbing
 		groupIndex = self.getMinValueGroupIndex()
 		
 	def constructiveSolution(self):
+		# Implementar solução construtiva
 		groupIndex = self.getMinValueGroupIndex()
-		for randomItem in 
 		
 	def evaluateSolution(self, partialSolution):
 		# Verificar se a solução encontrada pelo método construtivo e otimizada pelo hillCLimbing é melhor que a atual (self.solution)
 		return false
 	
-	def stopCondition(self):
-		return false
-		
 	def grasp(self):
 		self.initialSolution()	# Gera a solução inicial
 		iterationsInRow = 0
