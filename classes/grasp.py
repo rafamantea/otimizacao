@@ -22,7 +22,7 @@ class Grasp:
 			
 	def hillClimbing(self, partialSolution):
 		# Adaptar o hill climbing
-		groupIndex = getMinValueGroupIndex()
+		groupIndex = self.getMinValueGroupIndex()
 		
 	
 	def constructiveSolution(self):
@@ -38,7 +38,7 @@ class Grasp:
 		
 	def grasp(self):
 		while !self.stopCondition() :
-			solution = constructiveSolution()
-			solution = hillClimbing(solution)
-			if evaluateSolution(solution) :
+			solution = self.constructiveSolution()
+			solution = self.hillClimbing(solution)
+			if self.evaluateSolution(solution) :
 				self.solution = solution
