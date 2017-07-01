@@ -25,7 +25,7 @@ class Grasp:
 		return minGroupIndex
 
 	####	
-	# Seleciona o item com a melhor relação Lucro/Peso entre 5 items aleatórios que não estejam na solução atual
+	# Retorna o indice do item com a melhor relação Lucro/Peso entre 5 items aleatórios que não estejam na solução atual
 	####
 	def getBestItem(self):
 		groupIndex = self.getMinValueGroupIndex()
@@ -35,7 +35,7 @@ class Grasp:
 		while selected < self.NUM_SELECTED_ITEMS:
 			itemIndex = randint(0, self.countItemsByGroups[groupIndex])
 			if self.instance.items[groupIndex][itemIndex][2] == 0:	# verifica se o item não pertence a solução atual
-				selected += 1
+				selected = selected + 1
 				itemWeight = self.instance.items[groupIndex][itemIndex][0]
 				itemValue = self.instance.items[groupIndex][itemIndex][1]
 				itemStrenght = (itemValue / itemWeight)
@@ -45,19 +45,26 @@ class Grasp:
 		return selectedItemIndex
 			
 	####
+	# Adiciona o item com a melhor relação Lucro/Peso entre 5 itens aleatórios que não estejam na solução atual
+	####
+	def insertBestItem(self):
+		groupIndex = self.getMinValueGroupIndex()
+		bestItemIndex = self.getBestItem()
+		
+		itemWeight = self.instance.items[groupIndex][itemIndex][0]
+		newWeight = self.solutionWeight + itemWeight
+		if newWeight <= self.instance.capacity
+				self.instance.items[groupIndex][itemIndex][2] = 1	# Marca o item como selecionado na solução
+				self.solutionWeight = newWeight
+				# Adicionar item na solução
+				
+	####
 	# Cria uma solução inicial semi-aleatória
 	####
 	def initialSolution(self):
 		groupIndex = self.getMinValueGroupIndex()
 		while self.solutionWeight < self.instance.capacity :
-			itemIndex = self.getBestItem()
-			itemWeight = self.instance.items[groupIndex][itemIndex][0]
-			newWeight = self.solutionWeight + itemWeight
-			if newWeight <= self.instance.capacity
-				self.instance.items[groupIndex][itemIndex][2] = 1	# Adiciona o item na solução
-				self.solutionWeight = newWeight
-				# Adicionar item na solução
-		
+			self.insertBestItem()
 			
 			
 	def hillClimbing(self, partialSolution):
