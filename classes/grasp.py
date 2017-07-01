@@ -54,9 +54,9 @@ class Grasp:
 		itemWeight = self.instance.items[groupIndex][itemIndex][0]
 		newWeight = self.solutionWeight + itemWeight
 		if newWeight <= self.instance.capacity
-				self.instance.items[groupIndex][itemIndex][2] = 1	# Marca o item como selecionado na solução
-				self.solutionWeight = newWeight
-				# Adicionar item na solução
+			self.instance.items[groupIndex][itemIndex][2] = 1	# Marca o item como selecionado na solução
+			self.solutionWeight = newWeight
+			# Adicionar item na solução
 				
 	####
 	# Cria uma solução inicial semi-aleatória
