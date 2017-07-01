@@ -15,7 +15,7 @@ class KnapsackSharing:
         self.capacity = int(file.readline())
         self.countItemsByGroups = (file.readline()).split()
 
-        # ITEMS DATA STRUCT: List (groups) of lists (items) of tuples (weight|value)
+        # ITEMS DATA STRUCT: List (groups) of lists (items) of (weight|value|selected)
         self.items = []
 
         # Inicializing items struct
@@ -27,7 +27,7 @@ class KnapsackSharing:
         for countItems in self.countItemsByGroups:
             for i in range(int(countItems)):
                 item = (file.readline()).split()
-                self.items[groupIndex].append((int(item[0]), int(item[1])))
+                self.items[groupIndex].append((int(item[0]), int(item[1]), int(0))
 				self.groupValue[groupIndex] += int(item[1])
             groupIndex += 1
 
