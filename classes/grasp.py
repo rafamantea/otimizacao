@@ -56,22 +56,57 @@ class Grasp:
 		if newWeight <= self.instance.capacity
 			self.instance.items[groupIndex][bestItemIndex][2] = 1	# Marca o item como selecionado na solução
 			self.solutionWeight = newWeight
-			# Adicionar item na solução
+			# TODO: Adicionar item na solução
 				
 	####
-	# Cria uma solução inicial semi-aleatória
+	# Cria uma solução inicial semi-aleatória, de maneira a preencher no maximo 50% da capacidade da mochila
 	####
 	def initialSolution(self):
 		groupIndex = self.getMinValueGroupIndex()
-		while self.solutionWeight < self.instance.capacity :
+		while self.solutionWeight < (self.instance.capacity * 0.5 ):	
 			self.insertBestItem()
 			
 	####
-	# Hill Climbing busca local
+	# Hill Climbing
+	# Percorre os N vizinhos menores, e os N vizinhos maiores, avaliando apenas os itens que não estão na mochila.
+	# Se algum vizinho tiver melhor relação lucro/peso, ele irá substituir o item que entraria na mochila originalmente.
 	####
-	def hillClimbing(self, partialSolution):
-		# Adaptar o hill climbing
+	def hillClimbing(self, neighbours, partialItemIndex):
 		groupIndex = self.getMinValueGroupIndex()
+		
+		auxIndex = partialItemIndex
+		groupItemsCount = countItemsByGroups[groupIndex]
+		neighboursIt = 0
+		
+		currentBestItemIndex = partialItemIndex
+		currentBestItemStrength = self.instance.items[groupIndex][auxIndex][1] / self.instance.items[groupIndex][auxIndex][0]
+		
+		while (neighboursIt < neighbours) && ((auxIndex - 1) >= 0) :		# Percorre N vizinhos menores que o item pra ser selecionado
+			auxIndex = auxIndex - 1
+			if self.instance.items[groupIndex][auxIndex][3] == 0:			# O vizinho não pode ja estar na mochila
+				itemWeight = self.instance.items[groupIndex][auxIndex][0]
+				itemValue = self.instance.items[groupIndex][auxIndex][1]
+				itemStrenght = (itemValue / itemWeight)
+				if itemStrenght > currentBestItemStrength:
+					currentBestItemIndex = auxIndex
+					currentBestItemStrength = itemStrenght	
+			neighboursIt = neighboursIt + 1
+		
+		auxIndex = partialItemIndex
+		neighboursIt = 0
+		
+		while (neighboursIt < neighbours) && ((auxIndex + 1) < groupItemsCount) :		# Percorre N vizinhos maiores que o item pra ser selecionado
+			auxIndex = auxIndex + 1
+			if self.instance.items[groupIndex][auxIndex][3] == 0:			# O vizinho não pode ja estar na mochila		
+				itemWeight = self.instance.items[groupIndex][auxIndex][0]
+				itemValue = self.instance.items[groupIndex][auxIndex][1]
+				itemStrenght = (itemValue / itemWeight)
+				if itemStrenght > currentBestItemStrength:
+					currentBestItemIndex = auxIndex
+					currentBestItemStrength = itemStrenght	
+			neighboursIt = neighboursIt + 1			
+		
+		return currentBestItemIndex
 		
 	def constructiveSolution(self):
 		# Implementar solução construtiva
