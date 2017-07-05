@@ -4,9 +4,9 @@ import java.io.IOException;
 
 public class Parser {
     
-    public static Knapsack parse(String path) throws IOException {
+    public static Instance parse(String path) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(path));
-        Knapsack instance = new Knapsack();
+        Instance problemInstance;
         
         try {
             String line = br.readLine();
@@ -21,11 +21,11 @@ public class Parser {
             capacity = Integer.valueOf(line.toString());
             line = br.readLine();
 
-            final Instance problemInstance = new Instance(n, capacity, groups);
+            problemInstance = new Instance(n, capacity, groups);
             
             String trimmedLine = line.trim().replaceAll(" +", " ");
             String[] groupsLenght = trimmedLine.split("\\s+");
-
+            
             for(int i=0; i<groups; i++) {
                 
                 int length = Integer.valueOf(groupsLenght[i]);
@@ -46,6 +46,6 @@ public class Parser {
             br.close();
         }
         
-        return instance;
+        return problemInstance;
     }
 }

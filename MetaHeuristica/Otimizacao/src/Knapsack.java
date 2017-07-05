@@ -5,40 +5,68 @@ import java.util.Map;
 
 public class Knapsack {
 
-    private int capacity;
-    private int n;
-    
     private final Map<Integer, List<Item>> items;
-    private int minGroupIndex;
+    private final List<Item> itemsList;
     
-    public Knapsack(int capacity) {
+    private int minGroupIndex;
+    private int totalWeight;
+    private int totalValue;
+    
+    public Knapsack(Instance instance) {
         this.items = new HashMap();
-        this.capacity = capacity;
+        this.itemsList = new ArrayList();
+        this.totalWeight = 0;
+        this.totalValue = 0;
+        this.minGroupIndex = instance.getMinGroupIndex();
+        
+        this.initMap(instance.getGroups());
     }
     
-    public Knapsack() {
-        this(0);
+    private void initMap(int groups) {
+        for(int i=0; i< groups; i++) {
+            List<Item> items = new ArrayList();
+            this.items.put(i, items);
+        }
+    }
+    
+    public void addItem(Item item) {
+        List<Item> itemList = this.items.get(item.getGroup());
+        
+        if(itemList == null) {
+            itemList = new ArrayList<Item>();
+            this.items.put(item.getGroup(), itemList);
+        }
+        
+        this.totalWeight += item.getWeight();
+        this.totalValue += item.getValue();
+        
+        this.itemsList.add(item);
+        itemList.add(item);
+    }
+    
+    public void removeItem(Item item) {
+        List<Item> items = this.items.get(item.getGroup());
+        items.remove(item);
+        itemsList.remove(item);
+        
+        this.totalValue -= item.getValue();
+        this.totalWeight -= item.getWeight();
     }
     
     public List<Item> getItems() {
-        final List<Item> allItems = new ArrayList();
-        
-        for(List<Item> items: this.items.values()) {
-            allItems.addAll(items);
-        }
-        
-        return allItems; 
+        return this.itemsList;
+    }
+    
+    public List<Item> getMinGroupItems() {
+        return this.items.get(this.minGroupIndex);
     }
     
     public int getTotalValue() {
-        int sum = 0;
-        for(List<Item> items: this.items.values()) {
-            for(Item item: items) {
-                sum += item.getValue();
-            }
-        }
-        
-        return sum;
+        return this.totalValue;
+    }
+    
+    public int getTotalWeight() {
+        return this.totalWeight;
     }
     
     public int getMinGroupValue() {
@@ -52,14 +80,12 @@ public class Knapsack {
         return sum;
     }
     
-    public int getTotalWeight() {
-        int sum = 0;
+    public boolean hasItem(Item item) {
         for(List<Item> items: this.items.values()) {
-            for(Item item: items) {
-                sum += item.getWeight();
+            if(items.contains(item)) {
+                return true;
             }
         }
-        
-        return sum;
+        return false;
     }
 }
