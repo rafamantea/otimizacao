@@ -1,20 +1,33 @@
+package br.ufrgs.grasp;
+
 import java.util.List;
 import java.util.Random;
 
 public class Grasp {
     private static final int MAX_IT = 10;
     private static final int ALPHA = 5;
-    private static final int NEIGHBOURS_IT = 10;
+    private final int NEIGHBOURS_IT;
     
     private final Instance instance;
+    private final Long seed;
     
     private Knapsack solution;
     
-    public Grasp(Instance instance) {
+    public Grasp(Instance instance, Long seed) {
         this.instance = instance;
         this.instance.updateMinGroupIndex();
+		
+        this.seed = seed;
+        Double neighbours = (instance.getN() * 0.10);
+        this.NEIGHBOURS_IT = neighbours.intValue();
     }
-    
+        
+    private int generateRandomInt(int maxValue) {
+        final Random randomGenerator = (seed == null) ? new Random() : new Random(seed);
+
+        return randomGenerator.nextInt(maxValue);
+    }
+	
     private Knapsack hillClimbing(Knapsack solution) {
         Knapsack newSolution = new Knapsack(instance);
         List<Item> items = solution.getItems();
@@ -34,7 +47,11 @@ public class Grasp {
                 neighboursIt++;
             }
             
-            while(neighboursIt < NEIGHBOURS_IT && aux <= solution.getItems().size() - 1) {
+            aux = i;
+            neighboursIt = 0;
+            int maxSize = solution.getItems().size() - 1;
+            
+            while((neighboursIt < NEIGHBOURS_IT) && (aux < maxSize)) {
                 aux++;
                 Item nextItem = items.get(aux);
                 int newWeight = newSolution.getTotalWeight() + nextItem.getWeight();
@@ -52,13 +69,12 @@ public class Grasp {
     
     private Knapsack constructiveSolution() {
         final Knapsack constructiveSolution = new Knapsack(instance);
-        final Random randomGenerator = new Random();
 
         this.initConstructiveSolution(constructiveSolution);    //Constroi solução sem elementos do grupo com menor lucro
         int it = 0;
         
         while((constructiveSolution.getTotalWeight() < instance.getCapacity()) && it < 10) {
-            int index = randomGenerator.nextInt(instance.getMinGroupItems().size());
+            int index = generateRandomInt(instance.getMinGroupItems().size());
             Item randomItem = instance.getMinGroupItems().get(index);
 
             int newWeight = constructiveSolution.getTotalWeight() + randomItem.getWeight();
@@ -84,11 +100,10 @@ public class Grasp {
     
     private Knapsack buildInitialSolution() {
         final Knapsack solution = new Knapsack(instance);
-        final Random randomGenerator = new Random();
         int it = 0;
         
         while((solution.getTotalWeight() < instance.getCapacity()) && it < 10) {
-            int index = randomGenerator.nextInt(this.instance.getItems().size());
+            int index = generateRandomInt(this.instance.getItems().size());
             Item randomItem = instance.getItems().get(index);
 
             int newWeight = solution.getTotalWeight() + randomItem.getWeight();
@@ -103,7 +118,7 @@ public class Grasp {
         return solution;
     }
     
-    public void compute() {
+    public int compute() {
         int iterationsInRow = 0;
         
         this.solution = this.buildInitialSolution();
@@ -122,6 +137,6 @@ public class Grasp {
             }
         }
         
-        System.out.println("Z = " + newSolution.getMinGroupValue());
+        return newSolution.getMinGroupValue();
     }
 }

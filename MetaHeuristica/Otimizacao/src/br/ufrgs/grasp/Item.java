@@ -1,3 +1,4 @@
+package br.ufrgs.grasp;
 
 public class Item {
 
@@ -14,5 +15,5 @@ public class Item {
     public int getValue() { return this.value; }
     public int getWeight() { return this.weight; }
     public int getGroup() { return this.group; }
-    public double getStrenght() { return (this.value / this.weight) ; }
+    public double getStrenght() { return ( (double) this.value / (double) this.weight) ; }
 }
